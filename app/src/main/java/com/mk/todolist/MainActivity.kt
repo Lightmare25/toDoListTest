@@ -18,6 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Button
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,14 +28,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.IconButton
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.material3.TextField
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.Delete
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,12 +57,9 @@ data class Job(
 @Composable
 fun MyApp(modifier: Modifier = Modifier) {
 val jobs = remember { mutableStateListOf<Job>() }
-
-
-var currentId: Int = remember{1}
-
+var currentId: Int = remember{0}
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize().statusBarsPadding().padding(16.dp)) {
             JobInputBar(
                 onAddJob = {
                     title ->
@@ -92,9 +87,12 @@ fun JobInputBar(onAddJob: (String) -> Unit ) {
         onClick = {
             if(text.isNotBlank())
                 onAddJob(text)
-            text = ""})
+            text = ""},
+                shape = RoundedCornerShape(8.dp),
+        modifier = Modifier.height(56.dp))
+
     {
-        Text("Enter")
+        Text("Add")
     }
 }
 
@@ -108,20 +106,16 @@ fun JobItem(job : Job, onJobDelete : (Job) -> Unit) {
         horizontalArrangement = Arrangement.SpaceBetween) {
 
         Text(
-            text = "${job.id}. ${job.title}",
+            text = "${job.title}",
             modifier = Modifier.padding(16.dp),
             style = MaterialTheme.typography.bodyLarge
         )
-        IconButton(
-        onClick = { onJobDelete(job)  }
-
+        Button(
+        onClick = { onJobDelete(job)
+            },
+                shape = RoundedCornerShape(8.dp)
         ) {
-            Icon(
-            imageVector = Icons.Default.ExpandLess,
-            contentDescription = "Delete",
-            tint = MaterialTheme.colorScheme.error
-            )
-
+            Text("Remove")
         }
 
     }

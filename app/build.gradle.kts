@@ -39,7 +39,17 @@ android {
     buildFeatures {
         compose = true
     }
+
+
+    applicationVariants.all {
+        val variant = this
+        variant.outputs.all {
+            val output = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            output.outputFileName = "todolist.apk"
+        }
+    }
 }
+
 
 dependencies {
     implementation(libs.androidx.core.ktx)
